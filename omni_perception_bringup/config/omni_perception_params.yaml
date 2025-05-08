@@ -1,0 +1,24 @@
+/**:
+  ros__parameters:
+    # 基本参数
+    binary_thres: 200
+    detect_color: 0  # 0-RED, 1-BLUE
+    classifier_threshold: 0.7
+
+    # 灯条参数
+    light:
+      min_ratio: 0.1
+      max_ratio: 0.4
+      max_angle: 40.0
+
+    # 装甲板参数
+    armor:
+      min_light_ratio: 0.8
+      min_small_center_distance: 0.8
+      max_small_center_distance: 3.2
+      min_large_center_distance: 3.2
+      max_large_center_distance: 5.5
+      max_angle: 35.0
+
+    # 分类器参数
+    ignore_classes: ['negative'] 
