@@ -13,11 +13,30 @@ def generate_launch_description():
     camera_config = os.path.join(pkg_share, 'config', 'camera_params.yaml')
     
     # 创建相机节点
-    camera_node = Node(
+    camera_left_node = Node(
         package='usb_camera',
         executable='usb_camera_node',
-        name='camera1',
+        name='camera_left',
         parameters=[camera_config],
+        namespace='camera_left',
+        output='screen'
+    )
+
+    camera_mid_node = Node(
+        package='usb_camera',
+        executable='usb_camera_node',
+        name='camera_mid',
+        parameters=[camera_config],
+        namespace='camera_mid',
+        output='screen'
+    )
+
+    camera_right_node = Node(
+        package='usb_camera',
+        executable='usb_camera_node',
+        name='camera_right',
+        parameters=[camera_config],
+        namespace='camera_right',
         output='screen'
     )
 
@@ -40,6 +59,8 @@ def generate_launch_description():
     )
 
     return LaunchDescription([
-        camera_node,
+        camera_left_node,
+        camera_mid_node,
+        camera_right_node,
         delayed_omni_node
     ]) 

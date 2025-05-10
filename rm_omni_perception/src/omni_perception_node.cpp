@@ -42,13 +42,24 @@ OmniPerceptionNode::OmniPerceptionNode(const rclcpp::NodeOptions & options)
     // armors_pub_ = this->create_publisher<auto_aim_interfaces::msg::Armors>(
     // "/omniperception/armors", rclcpp::SensorDataQoS());   //用于发布检测到的装甲目标信息。
 
-    // Omni Publisher
-    omni_pub_ = this->create_publisher<auto_aim_interfaces::msg::Omni>(
-    "/omniperception/omni", rclcpp::SensorDataQoS());   //用于发布检测到的装甲目标信息。
+    // Omni Publisher //用于发布检测到的装甲目标信息。
+    omni_left_pub_ = this->create_publisher<auto_aim_interfaces::msg::Omni>(
+    "/omniperception/omni_left", rclcpp::SensorDataQoS());
+    omni_mid_pub_ = this->create_publisher<auto_aim_interfaces::msg::Omni>(
+    "/omniperception/omni_mid", rclcpp::SensorDataQoS());
+    omni_right_pub_ = this->create_publisher<auto_aim_interfaces::msg::Omni>(
+    "/omniperception/omni_right", rclcpp::SensorDataQoS());
 
-    img_sub_ = this->create_subscription<sensor_msgs::msg::Image>(
-    "/image_raw", rclcpp::SensorDataQoS(),
-    std::bind(&OmniPerceptionNode::imageCallback, this, std::placeholders::_1));
+    // Image Subscriber
+    img_sub_left_ = this->create_subscription<sensor_msgs::msg::Image>(
+    "/camera_left/image_raw", rclcpp::SensorDataQoS(),
+    std::bind(&OmniPerceptionNode::imageCallbackLeft, this, std::placeholders::_1));
+    img_sub_mid_ = this->create_subscription<sensor_msgs::msg::Image>(
+    "/camera_mid/image_raw", rclcpp::SensorDataQoS(),
+    std::bind(&OmniPerceptionNode::imageCallbackMid, this, std::placeholders::_1));
+    img_sub_right_ = this->create_subscription<sensor_msgs::msg::Image>(
+    "/camera_right/image_raw", rclcpp::SensorDataQoS(),
+    std::bind(&OmniPerceptionNode::imageCallbackRight, this, std::placeholders::_1));
 
     // 初始化debug参数
     debug_ = this->declare_parameter("debug", true);
@@ -60,13 +71,43 @@ OmniPerceptionNode::OmniPerceptionNode(const rclcpp::NodeOptions & options)
     RCLCPP_INFO(this->get_logger(), "OmniPerceptionNode initialized successfully!");
 }
 
-void OmniPerceptionNode::imageCallback(const sensor_msgs::msg::Image::SharedPtr img_msg){
+void OmniPerceptionNode::imageCallbackLeft(const sensor_msgs::msg::Image::SharedPtr img_msg){
     auto armors = detectArmors(img_msg);
+    auto omni_msg =auto_aim_interfaces::msg::Omni();
     if(!armors.empty()){
-        auto omni_msg =auto_aim_interfaces::msg::Omni();
-        omni_msg.detectleft =true;
-        omni_pub_->publish(omni_msg);
+        for(const auto & armor : armors){
+            omni_msg.detectleft =std::atoi(armor.number.c_str());
+            omni_left_pub_->publish(omni_msg);
+        }
     }
+    omni_msg.detectleft =0;
+    omni_left_pub_->publish(omni_msg);
+}
+
+void OmniPerceptionNode::imageCallbackMid(const sensor_msgs::msg::Image::SharedPtr img_msg){
+    auto armors = detectArmors(img_msg);
+    auto omni_msg =auto_aim_interfaces::msg::Omni();
+    if(!armors.empty()){
+        for(const auto & armor : armors){
+            omni_msg.detectmid =std::atoi(armor.number.c_str());
+            omni_mid_pub_->publish(omni_msg);
+        }
+    }
+    omni_msg.detectmid =0;
+    omni_mid_pub_->publish(omni_msg);
+}
+
+void OmniPerceptionNode::imageCallbackRight(const sensor_msgs::msg::Image::SharedPtr img_msg){
+    auto armors = detectArmors(img_msg);
+    auto omni_msg =auto_aim_interfaces::msg::Omni();
+    if(!armors.empty()){
+        for(const auto & armor : armors){
+            omni_msg.detectright =std::atoi(armor.number.c_str());
+            omni_right_pub_->publish(omni_msg);
+        }
+    }
+    omni_msg.detectright =0;
+    omni_right_pub_->publish(omni_msg);
 }
 
 std::vector<Armor> OmniPerceptionNode::detectArmors(const sensor_msgs::msg::Image::ConstSharedPtr & img_msg){
@@ -86,7 +127,7 @@ std::vector<Armor> OmniPerceptionNode::detectArmors(const sensor_msgs::msg::Imag
 
     // Publish debug info
     if (debug_) {
-        binary_img_pub_.publish(cv_bridge::CvImage(img_msg->header, "mono8", detector_->binary_img).toImageMsg());
+        //binary_img_pub_.publish(cv_bridge::CvImage(img_msg->header, "mono8", detector_->binary_img).toImageMsg());
 
     // Sort lights and armors data by x coordinate
     std::sort(
@@ -101,7 +142,7 @@ std::vector<Armor> OmniPerceptionNode::detectArmors(const sensor_msgs::msg::Imag
 
     if (!armors.empty()) {
         auto all_num_img = detector_->getAllNumbersImage();
-        number_img_pub_.publish(*cv_bridge::CvImage(img_msg->header, "mono8", all_num_img).toImageMsg());
+        //number_img_pub_.publish(*cv_bridge::CvImage(img_msg->header, "mono8", all_num_img).toImageMsg());
     }
 
     detector_->drawResults(img);
@@ -112,7 +153,7 @@ std::vector<Armor> OmniPerceptionNode::detectArmors(const sensor_msgs::msg::Imag
     latency_ss << "Latency: " << std::fixed << std::setprecision(2) << latency << "ms";
     auto latency_s = latency_ss.str();
     cv::putText(img, latency_s, cv::Point(10, 30), cv::FONT_HERSHEY_SIMPLEX, 1.0, cv::Scalar(0, 255, 0), 2);
-    result_img_pub_.publish(cv_bridge::CvImage(img_msg->header, "rgb8", img).toImageMsg());
+    //result_img_pub_.publish(cv_bridge::CvImage(img_msg->header, "rgb8", img).toImageMsg());
     }
 
     return armors;

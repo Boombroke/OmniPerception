@@ -31,6 +31,9 @@ namespace rm_omni_perception{
 
         private:
         void imageCallback(const sensor_msgs::msg::Image::SharedPtr img_msg);
+        void imageCallbackLeft(const sensor_msgs::msg::Image::SharedPtr img_msg);
+        void imageCallbackMid(const sensor_msgs::msg::Image::SharedPtr img_msg);
+        void imageCallbackRight(const sensor_msgs::msg::Image::SharedPtr img_msg);
 
         std::unique_ptr<Detector> initDetector();
         std::vector<Armor> detectArmors(const sensor_msgs::msg::Image::ConstSharedPtr & img_msg);
@@ -46,10 +49,15 @@ namespace rm_omni_perception{
         auto_aim_interfaces::msg::Armors armors_msg_;
         rclcpp::Publisher<auto_aim_interfaces::msg::Armors>::SharedPtr armors_pub_;
 
-        rclcpp::Publisher<auto_aim_interfaces::msg::Omni>::SharedPtr omni_pub_;
+        // Omni publisher
+        rclcpp::Publisher<auto_aim_interfaces::msg::Omni>::SharedPtr omni_left_pub_;
+        rclcpp::Publisher<auto_aim_interfaces::msg::Omni>::SharedPtr omni_mid_pub_;
+        rclcpp::Publisher<auto_aim_interfaces::msg::Omni>::SharedPtr omni_right_pub_;
 
         // Image subscrpition
-        rclcpp::Subscription<sensor_msgs::msg::Image>::SharedPtr img_sub_;
+        rclcpp::Subscription<sensor_msgs::msg::Image>::SharedPtr img_sub_left_;
+        rclcpp::Subscription<sensor_msgs::msg::Image>::SharedPtr img_sub_mid_;
+        rclcpp::Subscription<sensor_msgs::msg::Image>::SharedPtr img_sub_right_;
 
         // Visualization marker publisher
         visualization_msgs::msg::Marker armor_marker_;

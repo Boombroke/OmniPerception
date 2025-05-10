@@ -1,35 +1,26 @@
-camera1:
+camera_left:
   ros__parameters:
-    device_path: '/dev/video0'
-    frame_id: 'camera1'
-    topic_name: 'camera1/image_raw'
-    width: 1440
-    height: 1080
+    device_path: "/dev/video0"
+    frame_id: "camera_left"
+    topic_name: "camera_left/image_raw"
+    width: 1280
+    height: 720
     fps: 30
-    camera_info:
-      image_width: 1440
-      image_height: 1080
-      camera_name: narrow_stereo
-      camera_matrix:
-        rows: 3
-        cols: 3
-        data: [1845.493848, 0.000000, 760.106775,
-              0.000000, 1853.027675, 612.177958,
-              0.000000, 0.000000, 1.000000]
-      distortion_model: plumb_bob
-      distortion_coefficients:
-        rows: 1
-        cols: 5
-        data: [-0.086254, 0.196700, -0.000510, -0.002381, 0.000000]
-      rectification_matrix:
-        rows: 3
-        cols: 3
-        data: [1.000000, 0.000000, 0.000000,
-              0.000000, 1.000000, 0.000000,
-              0.000000, 0.000000, 1.000000]
-      projection_matrix:
-        rows: 3
-        cols: 4
-        data: [1830.108154, 0.000000, 757.373315, 0.000000,
-              0.000000, 1841.019287, 611.849401, 0.000000,
-              0.000000, 0.000000, 1.000000, 0.000000] 
+
+camera_mid:
+  ros__parameters:
+    device_path: "/dev/video2"
+    frame_id: "camera_mid"
+    topic_name: "camera_mid/image_raw"
+    width: 1280
+    height: 720
+    fps: 30
+
+camera_right:
+  ros__parameters:
+    device_path: "/dev/video4"
+    frame_id: "camera_right"
+    topic_name: "camera_right/image_raw"
+    width: 1280
+    height: 720
+    fps: 30 
