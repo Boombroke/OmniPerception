@@ -10,6 +10,7 @@ def generate_launch_description():
         'config',
         'camera_params.yaml'
     )
+    print(f"Loading config from: {config_file}")
 
     # 创建三个相机节点
     camera1_node = Node(
@@ -17,7 +18,7 @@ def generate_launch_description():
         executable='usb_camera_node',
         name='camera1',
         parameters=[config_file],
-        namespace='camera1',
+        # namespace='camera1',
         output='screen'
     )
 
@@ -26,7 +27,7 @@ def generate_launch_description():
         executable='usb_camera_node',
         name='camera2',
         parameters=[config_file],
-        namespace='camera2',
+        # namespace='camera2',
         output='screen'
     )
 
@@ -35,7 +36,7 @@ def generate_launch_description():
         executable='usb_camera_node',
         name='camera3',
         parameters=[config_file],
-        namespace='camera3',
+        # namespace='camera3',
         output='screen'
     )
 

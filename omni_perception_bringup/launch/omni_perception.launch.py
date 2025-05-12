@@ -19,7 +19,7 @@ def generate_launch_description():
         remappings=[
             ('/image_raw', '/camera1/image_raw')
         ],
-        arguments=['--ros-args', '--log-level', 'debug']
+        arguments=['--ros-args', '--log-level', 'info']
     )
 
     return LaunchDescription([

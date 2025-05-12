@@ -18,7 +18,7 @@ def generate_launch_description():
         executable='usb_camera_node',
         name='camera_left',
         parameters=[camera_config],
-        namespace='camera_left',
+        # namespace='camera_left',
         output='screen'
     )
 
@@ -27,7 +27,7 @@ def generate_launch_description():
         executable='usb_camera_node',
         name='camera_mid',
         parameters=[camera_config],
-        namespace='camera_mid',
+        # namespace='camera_mid',
         output='screen'
     )
 
@@ -36,7 +36,7 @@ def generate_launch_description():
         executable='usb_camera_node',
         name='camera_right',
         parameters=[camera_config],
-        namespace='camera_right',
+        # namespace='camera_right',
         output='screen'
     )
 

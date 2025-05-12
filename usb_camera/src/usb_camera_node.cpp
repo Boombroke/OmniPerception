@@ -1,17 +1,18 @@
 #include "usb_camera/usb_camera_node.hpp"
+#include <rclcpp/rclcpp.hpp>
+#include <rclcpp_components/register_node_macro.hpp>
 
 namespace usb_camera {
     USBCameraNode::USBCameraNode(const rclcpp::NodeOptions & options)
     : Node("usb_camera", options), running_(true) {
-    // 声明参数
+
     declare_parameter("device_path", "/dev/video0");
     declare_parameter("frame_id", "camera");
     declare_parameter("topic_name", "image_raw");
     declare_parameter("width", 1920);
     declare_parameter("height", 1080);
     declare_parameter("fps", 30);
-    
-    // 获取参数
+
     auto device_path = get_parameter("device_path").as_string();
     auto frame_id = get_parameter("frame_id").as_string();
     auto topic_name = get_parameter("topic_name").as_string();
@@ -25,6 +26,7 @@ namespace usb_camera {
       RCLCPP_ERROR(get_logger(), "Failed to open camera device: %s", device_path.c_str());
       throw std::runtime_error("Camera open failed");
     }
+    RCLCPP_INFO(get_logger(), "Camera device opened: %s", device_path.c_str());
 
     // 设置相机参数
     setCameraParameters();
@@ -127,5 +129,4 @@ namespace usb_camera {
   }
 }
 
-#include <rclcpp_components/register_node_macro.hpp>
 RCLCPP_COMPONENTS_REGISTER_NODE(usb_camera::USBCameraNode)

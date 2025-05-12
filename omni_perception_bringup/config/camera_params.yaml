@@ -1,26 +1,26 @@
-camera_left:
+/usb_camera_node:
   ros__parameters:
     device_path: "/dev/video0"
     frame_id: "camera_left"
     topic_name: "camera_left/image_raw"
-    width: 1280
-    height: 720
+    width: 1440
+    height: 1080
     fps: 30
 
-camera_mid:
+/camera_mid:
   ros__parameters:
     device_path: "/dev/video2"
     frame_id: "camera_mid"
     topic_name: "camera_mid/image_raw"
-    width: 1280
-    height: 720
+    width: 1440
+    height: 1080
     fps: 30
 
-camera_right:
+/camera_right:
   ros__parameters:
     device_path: "/dev/video4"
     frame_id: "camera_right"
     topic_name: "camera_right/image_raw"
-    width: 1280
-    height: 720
-    fps: 30 
+    width: 1440
+    height: 1080
+    fps: 30
