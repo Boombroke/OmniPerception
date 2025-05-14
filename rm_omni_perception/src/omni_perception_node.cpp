@@ -43,12 +43,8 @@ OmniPerceptionNode::OmniPerceptionNode(const rclcpp::NodeOptions & options)
     // "/omniperception/armors", rclcpp::SensorDataQoS());   //用于发布检测到的装甲目标信息。
 
     // Omni Publisher //用于发布检测到的装甲目标信息。
-    omni_left_pub_ = this->create_publisher<auto_aim_interfaces::msg::Omni>(
-    "/omniperception/omni_left", rclcpp::SensorDataQoS());
-    omni_mid_pub_ = this->create_publisher<auto_aim_interfaces::msg::Omni>(
-    "/omniperception/omni_mid", rclcpp::SensorDataQoS());
-    omni_right_pub_ = this->create_publisher<auto_aim_interfaces::msg::Omni>(
-    "/omniperception/omni_right", rclcpp::SensorDataQoS());
+    omni_pub_ = this->create_publisher<auto_aim_interfaces::msg::Omni>(
+    "/omniperception/omni", rclcpp::SensorDataQoS());
 
     // Image Subscriber
     img_sub_left_ = this->create_subscription<sensor_msgs::msg::Image>(
@@ -73,41 +69,47 @@ OmniPerceptionNode::OmniPerceptionNode(const rclcpp::NodeOptions & options)
 
 void OmniPerceptionNode::imageCallbackLeft(const sensor_msgs::msg::Image::SharedPtr img_msg){
     auto armors = detectArmors(img_msg);
-    auto omni_msg =auto_aim_interfaces::msg::Omni();
+    auto omni_msg = auto_aim_interfaces::msg::Omni();
     if(!armors.empty()){
         for(const auto & armor : armors){
-            omni_msg.detectleft =std::atoi(armor.number.c_str());
-            omni_left_pub_->publish(omni_msg);
+            omni_msg.detectleft = std::atoi(armor.number.c_str());
+            omni_pub_->publish(omni_msg);
         }
+    }else{
+        omni_msg.detectleft = 0;
     }
-    omni_msg.detectleft =0;
-    omni_left_pub_->publish(omni_msg);
+    
+    omni_pub_->publish(omni_msg);
 }
 
 void OmniPerceptionNode::imageCallbackMid(const sensor_msgs::msg::Image::SharedPtr img_msg){
     auto armors = detectArmors(img_msg);
-    auto omni_msg =auto_aim_interfaces::msg::Omni();
+    auto omni_msg = auto_aim_interfaces::msg::Omni();
     if(!armors.empty()){
         for(const auto & armor : armors){
-            omni_msg.detectmid =std::atoi(armor.number.c_str());
-            omni_mid_pub_->publish(omni_msg);
+            omni_msg.detectmid = std::atoi(armor.number.c_str());
+            omni_pub_->publish(omni_msg);
         }
+    }else{
+        omni_msg.detectmid = 0;
     }
-    omni_msg.detectmid =0;
-    omni_mid_pub_->publish(omni_msg);
+    
+    omni_pub_->publish(omni_msg);
 }
 
 void OmniPerceptionNode::imageCallbackRight(const sensor_msgs::msg::Image::SharedPtr img_msg){
     auto armors = detectArmors(img_msg);
-    auto omni_msg =auto_aim_interfaces::msg::Omni();
+    auto omni_msg = auto_aim_interfaces::msg::Omni();
     if(!armors.empty()){
         for(const auto & armor : armors){
-            omni_msg.detectright =std::atoi(armor.number.c_str());
-            omni_right_pub_->publish(omni_msg);
+            omni_msg.detectright = std::atoi(armor.number.c_str());
+            omni_pub_->publish(omni_msg);
         }
+    }else{
+        omni_msg.detectright = 0;
     }
-    omni_msg.detectright =0;
-    omni_right_pub_->publish(omni_msg);
+    
+    omni_pub_->publish(omni_msg);
 }
 
 std::vector<Armor> OmniPerceptionNode::detectArmors(const sensor_msgs::msg::Image::ConstSharedPtr & img_msg){

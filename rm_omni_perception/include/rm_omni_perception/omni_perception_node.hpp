@@ -50,9 +50,7 @@ namespace rm_omni_perception{
         rclcpp::Publisher<auto_aim_interfaces::msg::Armors>::SharedPtr armors_pub_;
 
         // Omni publisher
-        rclcpp::Publisher<auto_aim_interfaces::msg::Omni>::SharedPtr omni_left_pub_;
-        rclcpp::Publisher<auto_aim_interfaces::msg::Omni>::SharedPtr omni_mid_pub_;
-        rclcpp::Publisher<auto_aim_interfaces::msg::Omni>::SharedPtr omni_right_pub_;
+        rclcpp::Publisher<auto_aim_interfaces::msg::Omni>::SharedPtr omni_pub_;
 
         // Image subscrpition
         rclcpp::Subscription<sensor_msgs::msg::Image>::SharedPtr img_sub_left_;
